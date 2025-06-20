@@ -1,17 +1,17 @@
 
 
-📘 Module 1 – Définition et Gestion des Schémas de Table
+Module 1 – Définition et Gestion des Schémas de Table
 
-🧩 Description générale
+ Description générale
 
 Le Module 1 constitue la base structurelle du système. Il permet de définir des schémas de table, c’est-à-dire la structure des données que l’utilisateur souhaite stocker : noms des colonnes et types de données associés (str, int, float, etc.).
 
 Ce module garantit que toutes les données insérées ou manipulées dans les autres modules respectent un format prédéfini.
 
 
----
 
-🔧 Fonctionnalités principales
+
+ Fonctionnalités principales
 
 1. Création de schémas personnalisés :
 L’utilisateur définit une nouvelle table en donnant :
@@ -47,7 +47,7 @@ que chaque valeur est du bon type
 
 
 
-🎯 Pourquoi ce module est important ?
+ Pourquoi ce module est important ?
 
 Il impose une cohérence et une rigueur dans le stockage des données. Grâce à lui :
 
