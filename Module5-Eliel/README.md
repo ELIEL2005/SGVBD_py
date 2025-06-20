@@ -1,8 +1,8 @@
 
 
-💾 Module 5 – Persistance des Données et Interface Utilisateur
+ Module 5 – Persistance des Données et Interface Utilisateur
 
-🧩 Description générale
+ Description générale
 
 Le Module 5 permet d’enregistrer les données créées par le système dans un fichier externe (au format JSON) afin qu'elles puissent être retrouvées automatiquement au prochain lancement du programme.
 
@@ -11,7 +11,7 @@ Ce module intègre également une interface utilisateur en ligne de commande (CL
 
 
 
-🔧 Fonctionnalités principales
+ Fonctionnalités principales
 
 1. Sauvegarde automatique des données :
 
@@ -54,7 +54,7 @@ Vérification de la conformité des données avec les schémas existants
 
 
 
-💡 Pourquoi ce module est important ?
+Pourquoi ce module est important ?
 
 Il permet de :
 
