@@ -12,16 +12,16 @@ def insertion_sort(data, keys):
     """
     key_func = get_key_func(keys)
     n = len(data)
-    
+
     for i in range(1, n):
         current = data[i]
         current_key = key_func(current)
         j = i - 1
-       
+
         while j >= 0 and key_func(data[j]) > current_key:
             data[j + 1] = data[j]
             j -= 1
-            
+
         data[j + 1] = current
 
 def merge_sort(data, keys):
@@ -33,7 +33,7 @@ def merge_sort(data, keys):
     """
     if len(data) <= 1:
         return data
-    
+
     mid = len(data) // 2
     left = merge_sort(data[:mid], keys)
     right = merge_sort(data[mid:], keys)
@@ -43,7 +43,7 @@ def _merge(left, right, key_func):
     """Fusionne deux listes triées"""
     result = []
     i = j = 0
-    
+
     while i < len(left) and j < len(right):
         if key_func(left[i]) <= key_func(right[j]):
             result.append(left[i])
@@ -51,33 +51,44 @@ def _merge(left, right, key_func):
         else:
             result.append(right[j])
             j += 1
-            
+
     result.extend(left[i:])
     result.extend(right[j:])
     return result
 
-# APPELS DES FONCTIONS 
+# ========================
+# Fonction interactive pour main_cli.py
+# ========================
+def trier(table):
+    """
+    Interface interactive : trie une table selon une ou plusieurs colonnes,
+    en utilisant un algorithme choisi par l'utilisateur.
+    """
+    if not table:
+        print("❌ La table est vide.")
+        return
 
-"Données de test"
+    print("\n🔽 Tri des enregistrements")
+    print("Colonnes disponibles :", list(table[0].keys()))
 
-data_people = [
-    {"nom": "Donic", "age": 25, "ville": "Kisangani"},
-    {"nom": "Isaac", "age": 30, "ville": "Goma"},
-    {"nom": "Jules", "age": 20, "ville": "Lubumbashi"},
-    {"nom": "Samuel", "age": 25, "ville": "Bunia"}
-]
+    colonnes = input("Colonne(s) à trier (séparées par des virgules) : ").strip()
+    keys = [col.strip() for col in colonnes.split(",") if col.strip() in table[0]]
 
-"Test de insertion_sort (tri en place)"
+    if not keys:
+        print("❌ Aucune colonne valide pour le tri.")
+        return
 
-data_insertion = data_people.copy()
-insertion_sort(data_insertion, ["nom", "age"])
-print("Résultat du tri par insertion:")
-for item in data_insertion:
-    print(item)
+    algo = input("Choisir l'algorithme : [1] Insertion Sort (en place), [2] Merge Sort (copie) : ").strip()
 
-"Test de merge_sort (retourne une nouvelle liste triée)"
+    if algo == "1":
+        insertion_sort(table, keys)
+        print("✅ Table triée (insertion sort) :")
+    elif algo == "2":
+        table[:] = merge_sort(table, keys)
+        print("✅ Table triée (merge sort) :")
+    else:
+        print("❌ Choix d'algorithme invalide.")
+        return
 
-sorted_data = merge_sort(data_people, ["ville", "nom"])
-print("\nRésultat du tri fusion:")
-for item in sorted_data:
-        print(item)
+    for ligne in table:
+        print(ligne)
