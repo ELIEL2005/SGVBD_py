@@ -4,10 +4,10 @@ from Module1_Eliel import schema_manager
 from Module2_Charlotte import crud_operations
 from Module3_Victoire import query_engine
 from Module4_Léon import sort_engine
-from Module5_Eliel import storage
+from Module5_Eliel import Storage
 
 # Charger les tables et schémas depuis le fichier JSON au lancement
-tables, sch = storage.charger_etat()
+tables, sch = Storage.charger_etat()
 schema_manager.charger_schemas(sch)  # Injection des schémas dans le module 1
 
 def afficher_menu():
@@ -89,12 +89,12 @@ def main():
             sort_engine.trier(tables[nom_table])
 
         elif choix == "8":
-            storage.sauvegarder_etat(tables, schema_manager.get_schemas())
+            Storage.sauvegarder_etat(tables, schema_manager.get_schemas())
             print(" Données sauvegardées avec succès.")
 
         elif choix == "9":
             print(" Sauvegarde finale...")
-            storage.sauvegarder_etat(tables, schema_manager.get_schemas())
+            Storage.sauvegarder_etat(tables, schema_manager.get_schemas())
             print(" Au revoir.")
             break
 
