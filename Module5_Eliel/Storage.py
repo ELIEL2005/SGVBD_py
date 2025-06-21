@@ -1,43 +1,33 @@
 import json
+import os
 
-def sauvegarder_donnees(fichier, donnees):
-    with open(fichier, 'w') as f:
-        json.dump(donnees, f, indent=4)
+DATA_FILE = "data.json"
 
-def charger_donnees(fichier):
+def sauvegarder_etat(tables, schemas):
+    """
+    Sauvegarde les tables et les schémas dans un fichier JSON.
+    """
     try:
-        with open(fichier, 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {}  # Si le fichier n'existe pas encorefrom storage import sauvegarder_donnees, charger_donnees
+        with open(DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump({"tables": tables, "schemas": schemas}, f, indent=4)
+        print("✅ Sauvegarde réussie.")
+    except Exception as e:
+        print(f"❌ Erreur lors de la sauvegarde : {e}")
 
-FICHIER_JSON = "donnees.json"
-
-def menu():
-    print("\n--- MENU PRINCIPAL ---")
-    print("1. Afficher les données")
-    print("2. Ajouter une entrée")
-    print("3. Sauvegarder et quitter")
-
-def interface():
-    donnees = charger_donnees(FICHIER_JSON)
-   
-    while True:
-        menu()
-        choix = input("Choisissez une option : ")
-
-        if choix == "1":
-            print("Données actuelles :", donnees)
-        elif choix == "2":
-            cle = input("Entrez la clé : ")
-            valeur = input("Entrez la valeur : ")
-            donnees[cle] = valeur
-        elif choix == "3":
-            sauvegarder_donnees(FICHIER_JSON, donnees)
-            print("Données sauvegardées. Au revoir !")
-            break
-        else:
-            print("Option invalide. Réessayez.")
-
-if __name__ == "__main__":
-    interface()
+def charger_etat():
+    """
+    Charge les tables et schémas depuis un fichier JSON s’il existe.
+    :return: (tables, schemas)
+    """
+    if os.path.exists(DATA_FILE):
+        try:
+            with open(DATA_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                print("📦 Données chargées depuis le fichier JSON.")
+                return data.get("tables", {}), data.get("schemas", {})
+        except Exception as e:
+            print(f"❌ Erreur lors du chargement : {e}")
+            return {}, {}
+    else:
+        print("ℹ️ Aucun fichier de données trouvé. Initialisation vide.")
+        return {}, {}

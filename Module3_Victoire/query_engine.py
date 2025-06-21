@@ -33,25 +33,30 @@ class QueryEngine:
 
         return {"séquentielle": temps_seq, "indexée": temps_index}
 
-# Exemple de base de données
-donnees = [
-    {"id": 1, "nom": "Alice", "age": 28},
-    {"id": 2, "nom": "Bob", "age": 35},
-    {"id": 3, "nom": "Charlie", "age": 40},
-    {"id": 4, "nom": "David", "age": 23},
-]
 
-# Création du moteur de recherche
-moteur = QueryEngine(donnees)
+# =======================
+# Fonction interactive pour main_cli
+# =======================
 
-# Test de la recherche séquentielle (ex: trouver les personnes de plus de 30 ans)
-resultat_filtre = moteur.filtrer_par_age(30)
-print("Filtrage par âge (>30) :", resultat_filtre)
+def rechercher(table):
+    """Interface interactive pour rechercher dans une table."""
+    if not table:
+        print("❌ La table est vide.")
+        return
 
-# Test de recherche par index
-resultat_index = moteur.recherche_par_index(2)
-print("Recherche par ID (2) :", resultat_index)
+    print("\n🔍 Rechercher dans la table")
+    print("Colonnes disponibles :", list(table[0].keys()))
+    colonne = input("Nom de la colonne à filtrer : ").strip()
+    valeur = input("Valeur à rechercher : ").strip()
 
-# Test de comparaison de performance
-resultat_perf = moteur.comparer_performance(lambda x: x["age"] > 30, 3)
-print("Comparaison des performances :", resultat_perf)
+    resultats = []
+    for ligne in table:
+        if colonne in ligne and str(ligne[colonne]) == valeur:
+            resultats.append(ligne)
+
+    if resultats:
+        print(f"\n✅ {len(resultats)} résultat(s) trouvé(s) :")
+        for r in resultats:
+            print(r)
+    else:
+        print("❌ Aucun résultat trouvé.")

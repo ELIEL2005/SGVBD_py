@@ -1,42 +1,85 @@
-from typing import List, Dict, Optional, Any
+def ajouter_enregistrement(schema):
+    """
+    Demande à l'utilisateur de saisir les valeurs pour chaque colonne du schéma.
+    :param schema: dict {"nom_colonne": type}
+    :return: dict représentant un enregistrement
+    """
+    print("Ajout d'un nouvel enregistrement :")
+    enregistrement = {}
+    for colonne, type_attendu in schema.items():
+        while True:
+            valeur = input(f"{colonne} ({type_attendu.__name__}) : ").strip()
+            try:
+                if type_attendu == int:
+                    valeur = int(valeur)
+                elif type_attendu == float:
+                    valeur = float(valeur)
+                elif type_attendu == bool:
+                    valeur = valeur.lower() in ["true", "1", "oui"]
+                else:
+                    valeur = str(valeur)
+                enregistrement[colonne] = valeur
+                break
+            except ValueError:
+                print(f"❌ Valeur invalide pour {colonne}. Veuillez entrer un {type_attendu.__name__}.")
+    return enregistrement
 
-# AUTO-INCREMENTATION DE L'ID
-def generate_id(table: List[Dict[str, Any]]) -> int:
+def afficher_enregistrements(table):
+    """
+    Affiche tous les enregistrements d'une table.
+    :param table: liste de dictionnaires
+    """
     if not table:
-        return 1
-    return max(record["id"] for record in table) + 1
+        print("📭 La table est vide.")
+    else:
+        print("📄 Enregistrements :")
+        for i, ligne in enumerate(table, 1):
+            print(f"{i}. {ligne}")
 
-# CREER
-def add_record(table: List[Dict[str, Any]], record: Dict[str, Any]) -> Dict[str, Any]:
-    new_id = generate_id(table)
-    record["id"] = new_id
-    table.append(record)
-    return record
+def mettre_a_jour_enregistrement(table, schema):
+    """
+    Permet de modifier un enregistrement.
+    :param table: liste de dictionnaires
+    :param schema: dict du schéma
+    """
+    afficher_enregistrements(table)
+    try:
+        index = int(input("Numéro de l'enregistrement à modifier : ")) - 1
+        if 0 <= index < len(table):
+            print("Saisie des nouvelles valeurs (laisser vide pour ne pas changer) :")
+            for colonne, type_attendu in schema.items():
+                valeur = input(f"{colonne} [{table[index][colonne]}] : ").strip()
+                if valeur:
+                    try:
+                        if type_attendu == int:
+                            valeur = int(valeur)
+                        elif type_attendu == float:
+                            valeur = float(valeur)
+                        elif type_attendu == bool:
+                            valeur = valeur.lower() in ["true", "1", "oui"]
+                        else:
+                            valeur = str(valeur)
+                        table[index][colonne] = valeur
+                    except ValueError:
+                        print(f"❌ Valeur invalide pour {colonne}. Modification ignorée.")
+            print("✅ Enregistrement mis à jour.")
+        else:
+            print("❌ Numéro invalide.")
+    except ValueError:
+        print("❌ Entrée non valide.")
 
-# LIRE (par ID)
-def get_record_by_id(table: List[Dict[str, Any]], record_id: int) -> Optional[Dict[str, Any]]:
-    for record in table:
-        if record["id"] == record_id:
-            return record
-    return None
-
-# LIRE (balayage complet)
-def get_all_records(table: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    return table
-
-# MISE A JOUR
-def update_record(table: List[Dict[str, Any]], record_id: int, updated_data: Dict[str, Any]) -> bool:
-    for record in table:
-        if record["id"] == record_id:
-            record.update(updated_data)
-            record["id"] = record_id  # Ne pas modifier l’ID
-            return True
-    return False
-
-# SUPPRIMER
-def delete_record(table: List[Dict[str, Any]], record_id: int) -> bool:
-    for i, record in enumerate(table):
-        if record["id"] == record_id:
-            del table[i]
-            return True
-    return False
+def supprimer_enregistrement(table):
+    """
+    Supprime un enregistrement de la table.
+    :param table: liste de dictionnaires
+    """
+    afficher_enregistrements(table)
+    try:
+        index = int(input("Numéro de l'enregistrement à supprimer : ")) - 1
+        if 0 <= index < len(table):
+            del table[index]
+            print("🗑️ Enregistrement supprimé.")
+        else:
+            print("❌ Numéro invalide.")
+    except ValueError:
+        print("❌ Entrée non valide.")

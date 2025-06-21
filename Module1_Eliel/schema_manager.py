@@ -1,54 +1,75 @@
-# schema_manager.py
+# Module1_Eliel/schema_manager.py
 
 # Dictionnaire global pour stocker les schémas
 schemas = {}
 
 def creer_schema():
     """
-    Demande à l'utilisateur de définir un schéma de table depuis la CLI.
-    :return: dict - {"colonne": type}
+    Crée un nouveau schéma en demandant les colonnes et leurs types.
+    :return: dict représentant le schéma
     """
     print("Définition d'un nouveau schéma de table")
-    colonnes_types = {}
+    schema = {}
     while True:
-        nom_colonne = input("Nom de la colonne (laisser vide pour terminer) : ").strip()
-        if not nom_colonne:
+        colonne = input("Nom de la colonne (laisser vide pour terminer) : ").strip()
+        if colonne == "":
             break
-        type_colonne = input("Type de la colonne (int, str, float, bool) : ").strip()
-        if type_colonne not in ["int", "str", "float", "bool"]:
-            print("Type invalide. Réessayez.")
-            continue
-        colonnes_types[nom_colonne] = eval(type_colonne)
-    return colonnes_types
+        type_str = input("Type (str, int, float, bool) : ").strip().lower()
+        if type_str == "int":
+            schema[colonne] = int
+        elif type_str == "float":
+            schema[colonne] = float
+        elif type_str == "bool":
+            schema[colonne] = bool
+        else:
+            schema[colonne] = str
+    return schema
 
 def enregistrer_schema(nom_table, schema):
     """
     Enregistre un schéma dans le dictionnaire global.
-    :param nom_table: str
-    :param schema: dict
     """
-    if nom_table in schemas:
-        raise ValueError(f"La table '{nom_table}' existe déjà.")
     schemas[nom_table] = schema
+
+def get_schemas():
+    """
+    Retourne le dictionnaire des schémas (utile pour sauvegarder).
+    """
+    return schemas
+
+def charger_schemas(donnees_schemas):
+    """
+    Recharge les schémas à partir d'un dictionnaire (utile après lecture JSON).
+    """
+    global schemas
+    schemas = {}
+    for nom, colonne_types in donnees_schemas.items():
+        schema_converti = {}
+        for col, type_str in colonne_types.items():
+            if type_str == "int":
+                schema_converti[col] = int
+            elif type_str == "float":
+                schema_converti[col] = float
+            elif type_str == "bool":
+                schema_converti[col] = bool
+            else:
+                schema_converti[col] = str
+        schemas[nom] = schema_converti
 
 def valider_donnees(nom_table, donnees):
     """
-    Valide les données par rapport au schéma de la table.
-    :param nom_table: str
-    :param donnees: dict
-    :return: bool
+    Valide les données d’un enregistrement selon le schéma de la table.
     """
     if nom_table not in schemas:
         raise ValueError(f"Le schéma de la table '{nom_table}' n'existe pas.")
-   
+
     schema = schemas[nom_table]
     for colonne, type_attendu in schema.items():
         if colonne not in donnees:
-            print(f"Erreur : la colonne '{colonne}' est manquante.")
+            print(f"❌ Colonne manquante : {colonne}")
             return False
         if not isinstance(donnees[colonne], type_attendu):
-            print(f"Erreur : la colonne '{colonne}' attend un type {type_attendu.__name__}, "
-                  f"mais a reçu {type(donnees[colonne]).__name__}.")
+            print(f"❌ Mauvais type pour '{colonne}': attendu {type_attendu.__name__}, reçu {type(donnees[colonne]).__name__}")
             return False
     return True
 
@@ -56,15 +77,5 @@ def afficher_schemas():
     """
     Affiche tous les schémas enregistrés.
     """
-    print("=== Schémas enregistrés ===")
     for nom, sch in schemas.items():
         print(f"Table '{nom}': {sch}")
-    print("===========================")
-
-def generer_schema_auto(donnees):
-    """
-    Génère un schéma basé sur un exemple de dictionnaire.
-    :param donnees: dict
-    :return: dict
-    """
-    return {col: type(val) for col, val in donnees.items()}
