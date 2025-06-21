@@ -11,7 +11,7 @@ tables, sch = Storage.charger_etat()
 schema_manager.charger_schemas(sch)  # Injection des schémas dans le module 1
 
 def afficher_menu():
-    print("\n=== SGBD-Py - Menu Principal ===")
+    print("\n=== SGBD-Py - Menu Principal ===") 
     print("1. Créer une table")
     print("2. Ajouter un enregistrement")
     print("3. Afficher les enregistrements")
