@@ -25,10 +25,10 @@ def afficher_menu():
 
 def table_existe(nom_table):
     if nom_table not in tables:
-        print(f"❌ La table '{nom_table}' n'existe pas.")
+        print(f" La table '{nom_table}' n'existe pas.")
         return False
     if nom_table not in schema_manager.get_schemas():
-        print(f"❌ Le schéma de la table '{nom_table}' est introuvable.")
+        print(f" Le schéma de la table '{nom_table}' est introuvable.")
         return False
     return True
 
@@ -40,12 +40,12 @@ def main():
         if choix == "1":
             nom_table = input("Nom de la nouvelle table : ").strip()
             if nom_table in tables:
-                print(f"❌ La table '{nom_table}' existe déjà.")
+                print(f" La table '{nom_table}' existe déjà.")
                 continue
             schéma = schema_manager.creer_schema()
             schema_manager.enregistrer_schema(nom_table, schéma)
             tables[nom_table] = []
-            print(f"✅ Table '{nom_table}' créée avec succès.")
+            print(f" Table '{nom_table}' créée avec succès.")
 
         elif choix == "2":
             nom_table = input("Table dans laquelle insérer : ").strip()
@@ -54,9 +54,9 @@ def main():
             enreg = crud_operations.ajouter_enregistrement(schema_manager.get_schemas()[nom_table])
             if schema_manager.valider_donnees(nom_table, enreg):
                 tables[nom_table].append(enreg)
-                print("✅ Enregistrement ajouté.")
+                print(" Enregistrement ajouté.")
             else:
-                print("❌ Données invalides. Ajout annulé.")
+                print(" Données invalides. Ajout annulé.")
 
         elif choix == "3":
             nom_table = input("Table à afficher : ").strip()
@@ -90,16 +90,16 @@ def main():
 
         elif choix == "8":
             storage.sauvegarder_etat(tables, schema_manager.get_schemas())
-            print("✅ Données sauvegardées avec succès.")
+            print(" Données sauvegardées avec succès.")
 
         elif choix == "9":
-            print("💾 Sauvegarde finale...")
+            print(" Sauvegarde finale...")
             storage.sauvegarder_etat(tables, schema_manager.get_schemas())
-            print("👋 Au revoir.")
+            print(" Au revoir.")
             break
 
         else:
-            print("❌ Choix invalide. Réessaye.")
+            print(" Choix invalide. Réessaye.")
 
 if __name__ == "__main__":
     main()
